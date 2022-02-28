@@ -38,29 +38,34 @@ services:
 
   #MariaDB - service
 
+
   db:
-    image: mariadb:10.5.6
+    image: postgres:13.3
     container_name: db_container
     tty: true
+    restart: unless-stopped
 
     ports:
-      - "3306:3306"
+      - "5432:5432"
 
     environment:
-      MYSQL_DATABASE: lumen
-      MYSQL_ROOT_PASSWORD: 123456
+      POSTGRES_DB: "lumen"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "123456"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
 
     volumes:
-      - mariadbdata:/var/lib/mysql
-      - ./docker-files/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker-files/pgsql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgresdbdata:/var/lib/postgresql/data
 
     networks:
       - app-network
 
+
 #VOLUMES
 
 volumes:
-  mariadbdata:
+  postgresdbdata:
     driver: local
 
 #NETWORKS
