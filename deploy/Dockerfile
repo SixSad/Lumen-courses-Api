@@ -6,6 +6,7 @@ WORKDIR /var/www
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
+    libpq-dev  \
     build-essential \
     libpng-dev \
     libzip-dev \
@@ -21,9 +22,8 @@ RUN apt-get update && apt-get install -y \
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Install extensions
-RUN docker-php-ext-install pdo_mysql zip exif pcntl
+RUN docker-php-ext-install pdo_pgsql zip exif pcntl
 RUN docker-php-ext-configure gd  --with-jpeg=/usr/include/ --with-freetype=/usr/include/
 RUN docker-php-ext-install gd
 

@@ -14,7 +14,7 @@ services:
 
     volumes:
       - ../project/:/var/www
-      - ./docker-files/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./docker-files/php/local.ini:/usr/local/etc/php/local.ini
     networks:
       - app-network
 
@@ -41,7 +41,7 @@ services:
 
   db:
     image: postgres:13.2-alpine
-    container_name: db_container
+    container_name: db
     tty: true
     restart: unless-stopped
 
@@ -55,6 +55,7 @@ services:
       PGDATA: "/var/lib/postgresql/data/pgdata"
 
     volumes:
+      - .:/docker-entrypoint-initdb.d
       - postgresdbdata:/var/lib/postgresql/data
 
     networks:
