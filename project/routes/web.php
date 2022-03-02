@@ -13,6 +13,15 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+use App\Models\User;
+use Laravel\Lumen\Http\Request;
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->get('/users','UserController@index');
+    $router->post('/users/register','UserController@create');
+    $router->post('/users/login','UserController@login');
+    $router->put('/users/{id}','UserController@update');
+    $router->delete('/users/{id}','UserController@delete');
 });
+
+
