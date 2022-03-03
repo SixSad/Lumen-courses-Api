@@ -35,10 +35,10 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy application folder
-COPY . /var/www
+COPY ../.. /var/www
 
 # Copy existing permissions from folder to docker
-COPY --chown=www:www . /var/www
+COPY --chown=www:www ../.. /var/www
 RUN chown -R www-data:www-data /var/www
 
 # change current user to www

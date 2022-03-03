@@ -6,7 +6,7 @@ services:
   app:
     build:
       context: ../project/
-      dockerfile: ../deploy/Dockerfile
+      dockerfile: ../deploy/docker-files/php/Dockerfile
     container_name: app_container
     restart: unless-stopped
     tty: true
@@ -14,15 +14,15 @@ services:
 
     volumes:
       - ../project/:/var/www
-      - ./docker-files/php/local.ini:/usr/local/etc/php/local.ini
+      - ./docker-files/php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - app-network
 
   #NGNX - service
 
   webserver:
-    image: nginx:alpine
     container_name: webserver_container
+    build: docker-files/nginx
     restart: unless-stopped
     tty: true
 
@@ -32,6 +32,7 @@ services:
     volumes:
       - ../project/:/var/www
       - ./docker-files/nginx/conf.d/:/etc/nginx/conf.d/
+      - ../project/public:/var/www/public
 
     networks:
       - app-network

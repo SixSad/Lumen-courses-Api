@@ -17,11 +17,18 @@ use App\Models\User;
 use Laravel\Lumen\Http\Request;
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->get('/users','UserController@index');
-    $router->post('/users/register','UserController@create');
-    $router->post('/users/login','UserController@login');
-    $router->put('/users/{id}','UserController@update');
-    $router->delete('/users/{id}','UserController@delete');
+    $router->group(['prefix' => 'users'], function () use ($router) {
+        $router->get('/','UserController@index');
+        $router->post('register','UserController@create');
+        $router->post('login','UserController@login');
+        $router->put('{id}','UserController@update');
+        $router->delete('{id}','UserController@delete');
+    });
+    $router->group(['prefix' => 'courses'], function () use ($router) {
+        $router->get('/','CoursesController@index');
+        $router->post('/','CoursesController@create');
+    });
 });
+
 
 

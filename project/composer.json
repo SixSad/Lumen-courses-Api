@@ -6,7 +6,9 @@
     "type": "project",
     "require": {
         "php": "^8.0",
-        "laravel/lumen-framework": "^9.0"
+        "laravel/legacy-factories": "^1.3",
+        "laravel/lumen-framework": "8.x",
+        "tymon/jwt-auth": "1.0.x-dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -2,5 +2,4 @@
 /project/vendor
 /project/Homestead.json
 /project/Homestead.yaml
-/project/.env
 /project/.phpunit.result.cache
