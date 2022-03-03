@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Testing\Fluent\Concerns\Has;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserController extends BaseController

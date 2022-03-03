@@ -21,6 +21,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/','UserController@index');
         $router->post('register','UserController@create');
         $router->post('login','UserController@login');
+        $router->post('logout','UserController@logout');
         $router->put('{id}','UserController@update');
         $router->delete('{id}','UserController@delete');
     });
