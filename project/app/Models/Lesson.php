@@ -9,6 +9,7 @@ class Lesson extends Model
 {
     protected $table = 'lessons';
     use HasFactory;
+    public $timestamps = false;
 
     protected $guarded = [
         'id'

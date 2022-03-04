@@ -19,7 +19,7 @@ class UserController extends BaseController
     public function create(Request $request)
     {
         $this->validate($request, [
-            "email" => 'required|unique:users',
+            "email" => 'required|unique:users|email:rfc',
             'password' => 'required',
             'phone' => 'required',
         ]);
@@ -29,6 +29,9 @@ class UserController extends BaseController
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            "email" => 'unique:users|email:rfc',
+        ]);
         $user = User::find($id);
         $user->update($request->json()->all());
         return $user;
@@ -51,7 +54,7 @@ class UserController extends BaseController
         $credentials = request(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized, check the entered data'], 401);
         }
 
         return $this->respondWithToken($token);

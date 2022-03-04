@@ -18,17 +18,22 @@ use Laravel\Lumen\Http\Request;
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'users'], function () use ($router) {
-        $router->get('/','UserController@index');
+        $router->group(['middleware' => 'jwt'], function () use ($router) {
+            $router->get('/',['middleware'=> 'admin', 'uses'=> 'UserController@index']);
+            $router->post('logout','UserController@logout');
+            $router->put('{id}','UserController@update');
+            $router->delete('{id}','UserController@delete');
+        });
         $router->post('register','UserController@create');
         $router->post('login','UserController@login');
-        $router->post('logout','UserController@logout');
-        $router->put('{id}','UserController@update');
-        $router->delete('{id}','UserController@delete');
     });
     $router->group(['prefix' => 'courses'], function () use ($router) {
-        $router->get('/','CoursesController@index');
-        $router->post('/','CoursesController@create');
+        $router->get('/','CourseController@index');
+        $router->post('/',['middleware'=>['jwt','auth'], 'uses'=>'CourseController@create']);
     });
+    $router->post('course_users',['middleware'=>'jwt','uses'=>'CourseUserController@create']);
+    $router->put('course_lesson_users/{id}','LessonUserController@update');
+    $router->get('course_lessons','CourseLessonController@index');
 });
 
 

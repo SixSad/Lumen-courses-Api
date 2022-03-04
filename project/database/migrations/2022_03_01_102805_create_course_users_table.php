@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('user_id')->nullable(false);
             $table->integer('course_id')->nullable(false);
-            $table->integer('percentage_passing')->nullable(false);
+            $table->integer('percentage_passing')->nullable(false)->default(0);
         });
     }
 

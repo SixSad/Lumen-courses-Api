@@ -1,8 +1,6 @@
 version: '3.7'
 services:
 
-  #PHP-fpm - service
-
   app:
     build:
       context: ../project/
@@ -17,8 +15,6 @@ services:
       - ./docker-files/php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - app-network
-
-  #NGNX - service
 
   webserver:
     container_name: webserver_container
@@ -36,9 +32,6 @@ services:
 
     networks:
       - app-network
-
-  #MariaDB - service
-
 
   db:
     image: postgres:13.2-alpine
@@ -76,8 +69,6 @@ services:
 volumes:
   postgresdbdata:
     driver: local
-
-#NETWORKS
 
 networks:
   app-network:

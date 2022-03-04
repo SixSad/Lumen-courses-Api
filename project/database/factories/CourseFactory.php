@@ -22,7 +22,7 @@ class CourseFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title,
+            'title' => $this->faker->word,
             'student_capacity' => random_int(10,35),
             'start_date' => $this->faker->date,
             'end_date' => $this->faker->date,
