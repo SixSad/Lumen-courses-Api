@@ -31,7 +31,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/','CourseController@index');
         $router->post('/',['middleware'=>['jwt','auth'], 'uses'=>'CourseController@create']);
     });
-    $router->post('course_users',['middleware'=>'jwt','uses'=>'CourseUserController@create']);
+    $router->post('course_users',['middleware'=>'jwt','uses'=>'CourseUserController@add']);
     $router->put('course_lesson_users/{id}','LessonUserController@update');
     $router->get('course_lessons','CourseLessonController@index');
 });
