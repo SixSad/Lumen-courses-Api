@@ -28,6 +28,6 @@ class Course extends Model
 
     public function lessons()
     {
-        return $this->hasMany('Lessons','course_id');
+        return $this->hasMany('App\Models\Lesson');
     }
 }

@@ -10,7 +10,8 @@ class UserController extends BaseController
 {
     public function index()
     {
-        return User::all();
+        $users = User::with('courses')->get();
+        return response()->json($users);
     }
 
     public function create(Request $request)

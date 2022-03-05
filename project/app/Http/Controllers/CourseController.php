@@ -11,7 +11,8 @@ class CourseController extends BaseController
 {
     public function index()
     {
-        return Course::all()->sortBy('id');
+        $course = Course::with('lessons')->get()->sortBy('id');
+        return response()->json($course);
     }
 
     public function create(Request $request)

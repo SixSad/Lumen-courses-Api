@@ -31,7 +31,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function courses():HasMany
     {
-        return $this->hasMany('Course_User','user_id');
+        return $this->hasMany('App\Models\Course_User','user_id')->orderBy('percentage_passing','desc');;
     }
 
     public function lessons():HasMany
