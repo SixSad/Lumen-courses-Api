@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserController extends BaseController
@@ -21,7 +18,7 @@ class UserController extends BaseController
         $this->validate($request, [
             "email" => 'required|unique:users|email:rfc',
             'password' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/',
         ]);
         $user = User::create($request->all());
         return response()->json($user);

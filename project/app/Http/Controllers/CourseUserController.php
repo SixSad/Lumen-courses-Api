@@ -17,14 +17,13 @@ class CourseUserController extends BaseController
         $this->validate($request, [
             "title" => 'required|string',
         ]);
+
         $user = User::where('id',Auth::user()->id)->first();
         $course = Course::where('title',$request->title)->first();
         $record = new Course_User();
         $record->course_id=$course->id;
         $record->user_id=$user->id;
-        if(event(new AddCourseEvent($record))){
-            return response()->json(['message'=>'You have successfully enrolled in the course']);
-        }
-        return response()->json(['message'=>'You are already enrolled']);
+
+        return event(new AddCourseEvent($record));
     }
 }

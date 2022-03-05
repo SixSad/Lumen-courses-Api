@@ -16,6 +16,10 @@ class Course extends Model
         'id'
     ];
 
+    public function capacity()
+    {
+        return $this->student_capacity;
+    }
 
     public function courses()
     {

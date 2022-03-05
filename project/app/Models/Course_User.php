@@ -21,4 +21,5 @@ class Course_User extends Model
     {
         return $this->belongsTo('Course');
     }
+
 }

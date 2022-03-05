@@ -89,6 +89,9 @@ $app->routeMiddleware([
     'admin' => App\Http\Middleware\AdminMiddleware::class,
 ]);
 
+$app->routeMiddleware([
+    'owner' => App\Http\Middleware\OwnerMiddleware::class,
+]);
 
 /*
 |--------------------------------------------------------------------------

@@ -21,8 +21,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['middleware' => 'jwt'], function () use ($router) {
             $router->get('/',['middleware'=> 'admin', 'uses'=> 'UserController@index']);
             $router->post('logout','UserController@logout');
-            $router->put('{id}','UserController@update');
-            $router->delete('{id}','UserController@delete');
+            $router->put('{id}',['middleware'=>'owner','uses'=>'UserController@update']);
+            $router->delete('{id}',['middleware'=>'owner','uses'=>'UserController@delete']);
         });
         $router->post('register','UserController@create');
         $router->post('login','UserController@login');
