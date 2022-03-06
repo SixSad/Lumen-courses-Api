@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserController extends BaseController
@@ -18,28 +19,34 @@ class UserController extends BaseController
     {
         $this->validate($request, [
             "email" => 'required|unique:users|email:rfc',
-            'password' => 'required',
+            'password' => 'required|regex:/^(?=.*[0-9])(?=.*[a-z]).{8,20}$/',
             'phone' => 'required|regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/',
+            'first_name'=>'regex:/^([a-z]{3,15})$/iu',
+            'last_name'=>'regex:/^([a-z]{3,15})$/iu'
         ]);
         $user = User::create($request->all());
-        return response()->json($user);
+        return response()->json(collect($user)->except(['id','is_admin']));
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             "email" => 'unique:users|email:rfc',
+            'password' => 'regex:/^(?=.*[0-9])(?=.*[a-z]).{8,20}$/',
+            'phone' => 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/',
+            'first_name'=>'regex:/^([a-z]{3,15})$/iu',
+            'last_name'=>'regex:/^([a-z]{3,15})$/iu'
         ]);
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->update($request->json()->all());
-        return $user;
+        return response()->json(collect($user)->except(['id','is_admin']));
     }
 
     public function delete($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(['message' => 'Пользователь удален']);
+        return response()->json(['message' => 'User deleted']);
     }
 
     public function login(Request $request)
@@ -50,6 +57,10 @@ class UserController extends BaseController
         ]);
 
         $credentials = request(['email', 'password']);
+
+        if(Auth::user()){
+            return response()->json('You already login');
+        }
 
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized, check the entered data'], 401);

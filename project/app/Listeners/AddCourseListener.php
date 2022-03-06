@@ -34,7 +34,6 @@ class AddCourseListener
             $event->record->delete();
             return 'There are no places to enroll';
         }
-
         $event->record->save();
         return 'Congratulations, you have enrolled in the course';
     }

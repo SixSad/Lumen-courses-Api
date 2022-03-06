@@ -23,6 +23,7 @@ class CourseController extends BaseController
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
             'has_certificate' => 'boolean',
         ]);
+
         $course = Course::create($request->all());
         return response()->json($course);
     }

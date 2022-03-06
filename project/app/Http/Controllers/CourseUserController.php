@@ -18,12 +18,16 @@ class CourseUserController extends BaseController
             "title" => 'required|string',
         ]);
 
-        $user = User::where('id',Auth::user()->id)->first();
-        $course = Course::where('title',$request->title)->first();
+        $course = Course::where('title',$request->title)->orWhere('id',$request->id)->first();
+
+        if(empty($course)){
+            return response()->json(['message'=>'Input correct data'],400);
+        }
+
         $record = new Course_User();
         $record->course_id=$course->id;
-        $record->user_id=$user->id;
+        $record->user_id=Auth::user()->id;
 
-        return event(new AddCourseEvent($record));
+        return response()->json(['message'=>event(new AddCourseEvent($record))[0]]);
     }
 }
