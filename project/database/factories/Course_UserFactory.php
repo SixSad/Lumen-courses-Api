@@ -17,7 +17,7 @@ class Course_UserFactory extends Factory
         return [
             'user_id' => User::all()->random()->id,
             'course_id' => Course::all()->random()->id,
-            'percentage_passing' => random_int(0,100),
+            'percentage_passing' => 0,
         ];
     }
 }

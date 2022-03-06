@@ -12,14 +12,17 @@ class Course_User extends Model
     public $timestamps = false;
     protected $guarded = array('id');
 
-    public function single_user()
+    public function singleUser()
     {
-        return $this->belongsTo('User');
+        return $this->belongsTo('App\Models\User');
     }
 
-    public function single_course()
+    public function singleCourse()
     {
-        return $this->belongsTo('Course');
+        return $this->belongsTo('App\Models\Course');
     }
 
+    public function isEnroll($user_id){
+        return $this->where('user_id',$user_id)->exists();
+    }
 }
