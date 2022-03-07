@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\AddCourseEvent;
 use App\Models\Course;
-use App\Models\Course_User;
+use App\Models\CourseUser;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -23,8 +23,8 @@ class AddCourseListener
     public function handle(AddCourseEvent $event)
     {
         $course = Course::where('id',$event->record->course_id)->first();
-        $course_users = Course_User::where('course_id',$event->record->course_id)->count();
-        $course_user = Course_User::where('course_id',$event->record->course_id)->where('user_id',$event->record->user_id)->first();
+        $course_users = CourseUser::where('course_id',$event->record->course_id)->count();
+        $course_user = CourseUser::where('course_id',$event->record->course_id)->where('user_id',$event->record->user_id)->first();
 
         if(!empty($course_user)){
             $event->record->delete();

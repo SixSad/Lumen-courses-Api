@@ -79,17 +79,8 @@ $app->configure('auth');
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-]);
-
-$app->routeMiddleware([
     'jwt' => App\Http\Middleware\JwtMiddleware::class,
-]);
-
-$app->routeMiddleware([
     'admin' => App\Http\Middleware\AdminMiddleware::class,
-]);
-
-$app->routeMiddleware([
     'owner' => App\Http\Middleware\OwnerMiddleware::class,
 ]);
 

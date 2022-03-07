@@ -18,7 +18,7 @@ class CourseController extends BaseController
     {
         $this->validate($request, [
             'title' => 'required|unique:courses|regex:/(^([a-z,0-9]+)?$)/ui',
-            'student_capacity' => 'required|integer|between:1,99',
+            'student_capacity' => 'required|integer|between:5,99',
             'start_date' => 'required|date_format:Y-m-d|after_or_equal:date',
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
             'has_certificate' => 'boolean',
@@ -27,5 +27,4 @@ class CourseController extends BaseController
         $course = Course::create($request->all());
         return response()->json($course);
     }
-
 }

@@ -2,12 +2,12 @@
 
 namespace App\Events;
 
-use App\Models\Course_User;
+use App\Models\CourseUser;
 
 class AddCourseEvent extends Event
 {
     public $record;
-    public function __construct(Course_User $record)
+    public function __construct(CourseUser $record)
     {
         $this->record=$record;
     }

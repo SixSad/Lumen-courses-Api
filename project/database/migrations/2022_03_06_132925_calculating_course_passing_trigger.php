@@ -17,11 +17,18 @@ class CalculatingCoursePassingTrigger extends Migration
         DB::unprepared("
                     CREATE FUNCTION calculating_course_passing_function()
                             RETURNS trigger AS $$
+                            DECLARE
+                                course_key integer;
                             BEGIN
+                                course_key = (SELECT course_id from lessons WHERE id=NEW.lesson_id);
                                 UPDATE course_users SET percentage_passing =
-                                (SELECT count(*)*100/NULLIF((SELECT COUNT(*) FROM lesson_users),0) FROM lesson_users
-                                WHERE is_passed = true AND user_id=NEW.user_id)
-                                WHERE user_id=NEW.user_id;
+                                (
+                                SELECT count(*)*100/
+                                (SELECT count(*) FROM LESSON_USERS as l inner join lessons as len on l.lesson_id = len.id WHERE course_id=course_key)
+                                FROM LESSON_USERS as l inner join lessons as len on l.lesson_id = len.id
+                                WHERE is_passed=true and user_id=NEW.user_id and course_id=course_key
+                                    )
+                                WHERE user_id=NEW.user_id and course_id = course_key;
                                 RETURN NEW;
                             END;
                             $$ LANGUAGE plpgsql;

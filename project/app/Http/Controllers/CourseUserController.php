@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AddCourseEvent;
 use App\Models\Course;
-use App\Models\Course_User;
-use App\Models\User;
+use App\Models\CourseUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -15,19 +14,19 @@ class CourseUserController extends BaseController
     public function add(Request $request)
     {
         $this->validate($request, [
-            "title" => 'required|string',
+            "id" => 'required|integer',
         ]);
 
-        $course = Course::where('title',$request->title)->orWhere('id',$request->id)->first();
+        $course = Course::find($request->id);
 
-        if(empty($course)){
-            return response()->json(['message'=>'Input correct data'],400);
+        if (empty($course)) {
+            return response()->json(['message' => 'Input correct data'], 400);
         }
 
-        $record = new Course_User();
-        $record->course_id=$course->id;
-        $record->user_id=Auth::user()->id;
+        $record = new CourseUser();
+        $record->course_id = $course->id;
+        $record->user_id = Auth::user()->id;
 
-        return response()->json(['message'=>event(new AddCourseEvent($record))[0]]);
+        return response()->json(['message' => event(new AddCourseEvent($record))[0]]);
     }
 }

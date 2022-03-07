@@ -21,22 +21,23 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use HasFactory, Authenticatable, Authorizable;
 
     protected $guarded = [
-      'is_admin','id'
+        'is_admin', 'id'
     ];
+
 
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Hash::make($password);
     }
 
-    public function courses():HasMany
+    public function courses(): HasMany
     {
-        return $this->hasMany('App\Models\Course_User','user_id')->orderBy('percentage_passing','desc');;
+        return $this->hasMany('App\Models\CourseUser', 'user_id')->orderBy('percentage_passing', 'desc');;
     }
 
-    public function lessons():HasMany
+    public function lessons(): HasMany
     {
-        return $this->hasMany('Lesson_User','user_id');
+        return $this->hasMany('LessonUser', 'user_id');
     }
 
     public function getJWTIdentifier()
@@ -44,7 +45,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }

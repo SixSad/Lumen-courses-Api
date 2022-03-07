@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Course;
 use App\Models\Lesson;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 
 class LessonFactory extends Factory
 {
