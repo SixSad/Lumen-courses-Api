@@ -56,15 +56,23 @@ services:
       - app-network
 
   pgadmin:
-      container_name: pgadmin
-      image: dpage/pgadmin4
+    container_name: pgadmin
+    image: dpage/pgadmin4
 
-      environment:
-        PGADMIN_DEFAULT_EMAIL: email@mail.com
-        PGADMIN_DEFAULT_PASSWORD: 123456
+    environment:
+      PGADMIN_DEFAULT_EMAIL: email@mail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
 
-      ports:
-        - "5050:80"
+    ports:
+      - "5050:80"
+
+  composer:
+    container_name: composer_container
+    image: composer
+    volumes:
+      - ../project/:/app
+    command: composer install --ignore-platform-reqs
+
 
 volumes:
   postgresdbdata:

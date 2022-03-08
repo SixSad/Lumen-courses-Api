@@ -1,7 +1,6 @@
 FROM php:8.0.2-fpm
 
 COPY composer.lock composer.json /var/www/
-
 WORKDIR /var/www
 
 # Install dependencies
