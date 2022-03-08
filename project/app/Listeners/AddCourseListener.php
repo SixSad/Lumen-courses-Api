@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\AddCourseEvent;
 use App\Models\Course;
 use App\Models\CourseUser;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -20,22 +21,25 @@ class AddCourseListener
         //
     }
 
+    /**
+     * @throws Exception
+     */
     public function handle(AddCourseEvent $event)
     {
-        $course = Course::where('id',$event->record->course_id)->first();
-        $course_users = CourseUser::where('course_id',$event->record->course_id)->count();
-        $course_user = CourseUser::where('course_id',$event->record->course_id)->where('user_id',$event->record->user_id)->first();
+        $course = Course::where('id', $event->record->course_id)->first();
+        $course_users = CourseUser::where('course_id', $event->record->course_id)->count();
 
-        if(!empty($course_user)){
+        if (CourseUser::checkEnroll($event->record->course_id, $event->record->user_id)) {
             $event->record->delete();
-            return 'You are already enrolled';
+            throw new Exception('You are already enrolled', 200);
         }
-        if($course->capacity()<=$course_users){
+
+        if ($course->capacity() <= $course_users) {
             $event->record->delete();
-            return 'There are no places to enroll';
+            throw  new Exception('There are no places to enroll', 200);
         }
-        $event->record->save();
-        return 'Congratulations, you have enrolled in the course';
+
+        return $event->record->save();
     }
 }
 

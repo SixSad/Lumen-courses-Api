@@ -15,7 +15,7 @@ class EnrollUserTrigger extends Migration
     public function up()
     {
         DB::unprepared("
-                    CREATE FUNCTION enroll_user_function()
+                    CREATE OR REPLACE FUNCTION enroll_user_function()
                             RETURNS trigger AS $$
                             BEGIN
                                 INSERT INTO lesson_users (user_id,lesson_id,is_passed)
@@ -39,8 +39,9 @@ class EnrollUserTrigger extends Migration
      */
     public function down()
     {
-        DB::unprepared('
-        DROP TRIGGER enroll_user_trigger ON course_users;
-        DROP FUNCTION enroll_user_function() cascade;');
+        DB::unprepared(
+            'DROP FUNCTION enroll_user_function() cascade;
+            DROP TRIGGER IF EXISTS enroll_user_trigger ON course_users;'
+        );
     }
 }

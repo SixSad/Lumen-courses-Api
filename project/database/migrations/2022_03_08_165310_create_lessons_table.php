@@ -12,12 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('lesson_users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->nullable(false);
-            $table->integer('lesson_id')->nullable(false);
-            $table->boolean('is_passed')->nullable(false)->default(0);
-
+        Schema::create('lessons', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('course_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->string('theme')->nullable(true);
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_users');
+        Schema::dropIfExists('lessons');
     }
 };

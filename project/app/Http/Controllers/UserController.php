@@ -37,14 +37,14 @@ class UserController extends BaseController
             'first_name'=>'regex:/^([a-z]{3,15})$/iu',
             'last_name'=>'regex:/^([a-z]{3,15})$/iu'
         ]);
-        $user = User::findOrFail($id);
+        $user = User::find($id);
         $user->update($request->json()->all());
         return response()->json(collect($user)->except(['id','is_admin']));
     }
 
     public function delete($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::find($id);
         $user->delete();
         return response()->json(['message' => 'User deleted']);
     }

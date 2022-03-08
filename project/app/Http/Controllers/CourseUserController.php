@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\AddCourseEvent;
 use App\Models\Course;
 use App\Models\CourseUser;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -17,16 +18,23 @@ class CourseUserController extends BaseController
             "id" => 'required|integer',
         ]);
 
-        $course = Course::find($request->id);
+        try {
+            $course = Course::find($request->id);
 
-        if (empty($course)) {
-            return response()->json(['message' => 'Input correct data'], 400);
+            if (empty($course)) {
+                throw new Exception('Input correct data', 400);
+            }
+
+            $record = new CourseUser();
+            $record->course_id = $course->id;
+            $record->user_id = Auth::user()->id;
+            event(new AddCourseEvent($record));
+
+        } catch (Exception $e) {
+
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
 
-        $record = new CourseUser();
-        $record->course_id = $course->id;
-        $record->user_id = Auth::user()->id;
-
-        return response()->json(['message' => event(new AddCourseEvent($record))[0]]);
+        return response()->json(['message' => 'Congratulations, you have enrolled in the course']);
     }
 }

@@ -15,7 +15,7 @@ class CalculatingCoursePassingTrigger extends Migration
     public function up()
     {
         DB::unprepared("
-                    CREATE FUNCTION calculating_course_passing_function()
+                    CREATE OR REPLACE FUNCTION calculating_course_passing_function()
                             RETURNS trigger AS $$
                             DECLARE
                                 course_key integer;
@@ -49,7 +49,8 @@ class CalculatingCoursePassingTrigger extends Migration
     public function down()
     {
         DB::unprepared('
-        DROP TRIGGER calculating_course_passing_trigger on lesson_users;
-        DROP FUNCTION calculating_course_passing_function() cascade;');
+                DROP FUNCTION IF EXISTS calculating_course_passing_function() cascade;
+                DROP TRIGGER IF EXISTS calculating_course_passing_trigger on lesson_users;
+                ');
     }
 }

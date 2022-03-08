@@ -3,31 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\LessonUser;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use Throwable;
 
 
 class LessonUserController extends BaseController
 {
     public function update($id)
     {
+        try {
+            $user_lesson = LessonUser::lessonUser($id, Auth::user()->id);
 
-        if (empty((int)$id)) {
-            return response()->json(['message' => 'Bad request'], 400);
+            if (empty($user_lesson)) {
+                throw new Exception('Incorrect lesson', 404);
+            }
+
+            if ($user_lesson->is_passed == true) {
+                throw new Exception('You have already completed the lesson', 200);
+            }
+
+            $user_lesson->update(['is_passed' => true]);
+
+        } catch (Throwable $e) {
+
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
-
-        $user_lesson = LessonUser::lessonUser($id, Auth::user()->id);
-
-        if (empty($user_lesson)) {
-            return response()->json(['message' => 'Input correct lesson'], 404);
-        }
-
-        if ($user_lesson->is_passed == true) {
-            return response()->json(['message' => 'You have already completed the lesson']);
-        }
-        $user_lesson->update(['is_passed' => true]);
 
         return response()->json(['message' => 'congratulations you have completed the lesson', 'lesson' => $user_lesson]);
     }
-
 }

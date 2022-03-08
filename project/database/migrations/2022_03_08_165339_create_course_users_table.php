@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('course_users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->nullable(false);
-            $table->integer('course_id')->nullable(false);
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('course_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->integer('percentage_passing')->nullable(false)->default(0);
         });
     }
