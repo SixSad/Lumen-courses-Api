@@ -32,9 +32,18 @@ class CourseUserController extends BaseController
 
         } catch (Exception $e) {
 
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
+            return response()->json([
+                'data' => [
+                    'message' => $e->getMessage()
+                ]
+            ], $e->getCode());
         }
 
-        return response()->json(['message' => 'Congratulations, you have enrolled in the course']);
+        return response()->json([
+            'data' => [
+                'message' => 'Congratulations, you have enrolled in the course',
+                'course_id' => $record->id
+            ]
+        ], 201);
     }
 }

@@ -11,7 +11,9 @@ class CourseController extends BaseController
     public function index()
     {
         $course = Course::with('lessons')->get()->sortBy('id');
-        return response()->json($course);
+        return response()->json([
+            'data' => $course
+        ]);
     }
 
     public function create(Request $request)
@@ -25,6 +27,6 @@ class CourseController extends BaseController
         ]);
 
         $course = Course::create($request->all());
-        return response()->json($course);
+        return response()->json(['data' => $course], 201);
     }
 }

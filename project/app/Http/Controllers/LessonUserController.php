@@ -29,9 +29,18 @@ class LessonUserController extends BaseController
 
         } catch (Throwable $e) {
 
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
+            return response()->json([
+                'data'=>[
+                    'message' => $e->getMessage(),
+                ]
+            ],$e->getCode());
         }
 
-        return response()->json(['message' => 'congratulations you have completed the lesson', 'lesson' => $user_lesson]);
+        return response()->json([
+            'data'=> [
+                'message' => 'congratulations you have completed the lesson',
+                'lesson_id' => $user_lesson->lesson_id
+            ]
+        ]);
     }
 }

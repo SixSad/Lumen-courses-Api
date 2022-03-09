@@ -12,7 +12,7 @@ class UserController extends BaseController
     public function index()
     {
         $users = User::with('courses')->get();
-        return response()->json($users);
+        return response()->json(['data' => $users]);
     }
 
     public function create(Request $request)
@@ -21,11 +21,14 @@ class UserController extends BaseController
             "email" => 'required|unique:users|email:rfc',
             'password' => 'required|regex:/^(?=.*[0-9])(?=.*[a-z]).{8,20}$/',
             'phone' => 'required|regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/',
-            'first_name'=>'regex:/^([a-z]{3,15})$/iu',
-            'last_name'=>'regex:/^([a-z]{3,15})$/iu'
+            'first_name' => 'regex:/^([a-z]{3,15})$/iu',
+            'last_name' => 'regex:/^([a-z]{3,15})$/iu'
         ]);
         $user = User::create($request->all());
-        return response()->json(collect($user)->except(['id','is_admin']));
+
+        return response()->json([
+            "data" => collect($user)->except(['id', 'is_admin', 'password'])
+        ],201);
     }
 
     public function update(Request $request, $id)
@@ -34,19 +37,28 @@ class UserController extends BaseController
             "email" => 'unique:users|email:rfc',
             'password' => 'regex:/^(?=.*[0-9])(?=.*[a-z]).{8,20}$/',
             'phone' => 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/',
-            'first_name'=>'regex:/^([a-z]{3,15})$/iu',
-            'last_name'=>'regex:/^([a-z]{3,15})$/iu'
+            'first_name' => 'regex:/^([a-z]{3,15})$/iu',
+            'last_name' => 'regex:/^([a-z]{3,15})$/iu'
         ]);
+
         $user = User::find($id);
         $user->update($request->json()->all());
-        return response()->json(collect($user)->except(['id','is_admin']));
+
+        return response()->json([
+            "data" => collect($user)->except(['id', 'is_admin','password'])
+        ]);
     }
 
     public function delete($id)
     {
         $user = User::find($id);
         $user->delete();
-        return response()->json(['message' => 'User deleted']);
+
+        return response()->json([
+            'data' => [
+                'message' => 'User deleted'
+            ],
+        ]);
     }
 
     public function login(Request $request)
@@ -58,12 +70,20 @@ class UserController extends BaseController
 
         $credentials = request(['email', 'password']);
 
-        if(Auth::user()){
-            return response()->json('You already login');
+        if (Auth::user()) {
+            return response()->json([
+                'data' => [
+                    'message' => '[You already login'
+                ]
+            ]);
         }
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized, check the entered data'], 401);
+            return response()->json([
+                'data' => [
+                    'error' => 'Unauthorized, check the entered data'
+                ]
+            ], 401);
         }
 
         return $this->respondWithToken($token);
@@ -73,15 +93,21 @@ class UserController extends BaseController
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json([
+            'data' => [
+                'message' => 'Successfully logged out'
+            ]
+        ]);
     }
 
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'data' => [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ]
         ]);
     }
 }

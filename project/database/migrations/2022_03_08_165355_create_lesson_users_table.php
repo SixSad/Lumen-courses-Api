@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->boolean('is_passed')->nullable(false)->default(0);
+            $table->boolean('is_passed')->nullable(false)->default(false);
 
         });
     }
