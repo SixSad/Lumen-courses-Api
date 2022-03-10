@@ -70,15 +70,6 @@
 			"name": "Login",
 			"event": [
 				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
 					"listen": "test",
 					"script": {
 						"exec": [
@@ -106,6 +97,15 @@
 							"    var access_token = pm.response.json().data.access_token;\r",
 							"    pm.environment.set(\"token\", access_token);\r",
 							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -218,25 +218,27 @@
 							"    pm.response.to.have.status(201);\r",
 							"});\r",
 							"\r",
-							"var data = pm.response.json().data;\r",
+							"var data = pm.response.json().data\r",
+							"console.log(typeof(data.id))\r",
 							"\r",
 							"var scheme = {\r",
 							"    \"type\": \"object\",\r",
-							"    \"required\": [\"title\", \"student_capacity\", \"start_date\", \"end_date\", \"has_certificate\", \"id\"],\r",
 							"    \"properties\": {\r",
 							"        \"title\": { \"type\": \"string\" },\r",
-							"        \"student_capacity\": { \"type\": \"integer\" },\r",
-							"        \"start_date\": { \"type\": \"data\" },\r",
-							"        \"end_date\": { \"type\": \"data\" },\r",
+							"        \"student_capacity\": { \"type\": \"number\" },\r",
+							"        \"start_date\": { \"type\": \"string\" },\r",
+							"        \"end_date\": { \"type\": \"string\" },\r",
 							"        \"has_certificate\": { \"type\": \"boolean\" },\r",
-							"        \"id\": { \"type\": \"integer\" }\r",
+							"        \"id\": { \"type\": \"number\" }\r",
 							"    }\r",
 							"};\r",
 							"\r",
 							"pm.test('Создание курса - Успех. Correct body', function () {\r",
 							"    var isValidScheme = tv4.validate(data, scheme, true, true);\r",
 							"    pm.expect(isValidScheme).to.be.true;\r",
-							"});"
+							"});\r",
+							"\r",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -257,7 +259,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\":\"zxcaqq\",\r\n    \"student_capacity\":\"99\",\r\n    \"start_date\":\"2022-03-12\",\r\n    \"end_date\":\"2022-03-24\",\r\n    \"has_certificate\":false\r\n}",
+					"raw": "{\r\n    \"title\":\"zxasaadq21\",\r\n    \"student_capacity\": 12,\r\n    \"start_date\":\"2022-03-12\",\r\n    \"end_date\":\"2022-03-24\",\r\n    \"has_certificate\":false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -344,7 +346,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"C4. Оформление заказа - Успех. Correct status\", function () {\r",
+							"pm.test(\"Запись на курс - Успех. Correct status\", function () {\r",
 							"    pm.response.to.have.status(201);\r",
 							"});\r",
 							"\r",
@@ -359,7 +361,7 @@
 							"    }\r",
 							"};\r",
 							"\r",
-							"pm.test('C4. Оформление заказа - Успех. Correct body', function() {\r",
+							"pm.test('Запись на курс - Успех. Correct body', function() {\r",
 							"    var isValidScheme = tv4.validate(data, scheme, true, true);\r",
 							"    pm.expect(isValidScheme).to.be.true;\r",
 							"});"
@@ -383,7 +385,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\":\"4\"\r\n}",
+					"raw": "{\r\n    \"id\":\"21\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -443,7 +445,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}/api/course_lessons?course_id=13",
+					"raw": "{{localhost}}/api/course_lessons?course_id=21",
 					"host": [
 						"{{localhost}}"
 					],
@@ -454,7 +456,7 @@
 					"query": [
 						{
 							"key": "course_id",
-							"value": "13"
+							"value": "21"
 						}
 					]
 				}
@@ -506,14 +508,14 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}/api/course_lesson_users/4",
+					"raw": "{{localhost}}/api/course_lesson_users/21",
 					"host": [
 						"{{localhost}}"
 					],
 					"path": [
 						"api",
 						"course_lesson_users",
-						"4"
+						"21"
 					]
 				}
 			},
@@ -531,6 +533,7 @@
 							"});\r",
 							"\r",
 							"var data = pm.response.json().data;\r",
+							"console.log(data)\r",
 							"\r",
 							"var scheme = {\r",
 							"    \"type\": \"array\",\r",

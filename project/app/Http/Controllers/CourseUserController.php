@@ -42,7 +42,7 @@ class CourseUserController extends BaseController
         return response()->json([
             'data' => [
                 'message' => 'Congratulations, you have enrolled in the course',
-                'course_id' => $record->id
+                'course_id' => $record->course_id
             ]
         ], 201);
     }
